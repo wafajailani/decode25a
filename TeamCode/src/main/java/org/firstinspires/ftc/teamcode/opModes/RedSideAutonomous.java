@@ -13,6 +13,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.FunctionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelDeadlineGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
@@ -61,7 +62,7 @@ public class RedSideAutonomous extends CommandOpMode {
 
         TurnInPlace = follower.pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(90, 102), new Pose(90, 102))  //new BezierLine(new Pose(144-44.750, 112.000), new Pose(144-45.000, 95.000))
+                        new BezierLine(new Pose(90, 102), new Pose(90, 103))  //new BezierLine(new Pose(144-44.750, 112.000), new Pose(144-45.000, 95.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(90))
                 .build();
@@ -74,7 +75,7 @@ public class RedSideAutonomous extends CommandOpMode {
                 .build();
 
          Intake1Through = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(79, 95.000), new Pose(144-15.000, 95.000)))
+                .addPath(new BezierLine(new Pose(79, 95.000), new Pose(144-25.000, 95.000)))
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(0))
                 .build();
 
