@@ -197,11 +197,12 @@ public class RedSideAutonomous extends CommandOpMode {
         // Create the autonomous command sequence
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 //Preloads
+                new InstantCommand(m_intake::lockGate).withTimeout(150),
                 moveAndPrepareFlywheel(StartToShoot0, -150, 0.45, 1.0), //decreasing = less left -> increasing = less right // -90 degrees points to front of field
                 shootInPlaceFlywheel(StartToShoot0, 0.60, 1.0),
 
                 //First line
-              //  new FollowPathCommand(follower, TurnInPlace),
+                new FollowPathCommand(follower, TurnInPlace),
                 moveAndIntake(Shoot0ToIntake1, Intake1Through),
                 new InstantCommand(m_intake::lockGate).withTimeout(150)
                         .deadlineWith( new RunCommand(()->m_intake.setDutyCycle(1.0))),
