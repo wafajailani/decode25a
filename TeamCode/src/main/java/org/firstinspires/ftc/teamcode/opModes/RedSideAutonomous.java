@@ -62,7 +62,7 @@ public class RedSideAutonomous extends CommandOpMode {
 
         TurnInPlace = follower.pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(90, 102), new Pose(90, 103))  //new BezierLine(new Pose(144-44.750, 112.000), new Pose(144-45.000, 95.000))
+                        new BezierLine(new Pose(90, 102), new Pose(90, 102.5))  //new BezierLine(new Pose(144-44.750, 112.000), new Pose(144-45.000, 95.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(90))
                 .build();
@@ -75,7 +75,7 @@ public class RedSideAutonomous extends CommandOpMode {
                 .build();
 
          Intake1Through = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(79, 95.000), new Pose(144-25.000, 95.000)))
+                .addPath(new BezierLine(new Pose(79, 95.000), new Pose(140, 95.000)))
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(0))
                 .build();
 

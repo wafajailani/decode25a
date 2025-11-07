@@ -85,6 +85,8 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotor2.set(calculated);
     }
 
+
+
     public boolean withinFlywheelTolerance(double tolerance) {
         flywheelPIDF.setTolerance(tolerance);
         return flywheelPIDF.atSetPoint();
