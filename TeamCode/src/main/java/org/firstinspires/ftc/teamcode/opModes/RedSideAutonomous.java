@@ -22,6 +22,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 import com.seattlesolvers.solverslib.util.TelemetryData;
 
+import org.firstinspires.ftc.teamcode.commands.ShootOneBall;
 import org.firstinspires.ftc.teamcode.commands.ShootThreeBallsAuto;
 import org.firstinspires.ftc.teamcode.commands.ShootThreeBallsFlywheel;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -68,19 +69,19 @@ public class RedSideAutonomous extends CommandOpMode {
                 .build();
 
          Shoot0ToIntake1 = follower.pathBuilder()
-                .addPath(                                                                       //go to intake
-                        new BezierLine(new Pose(90, 102, 112.000), new Pose(79, 95.000))  //new BezierLine(new Pose(144-44.750, 112.000), new Pose(144-45.000, 95.000))
+                .addPath(
+                        new BezierLine(new Pose(90, 102, 112.000), new Pose(79, 95.000))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(90))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90)) //45, 90
                 .build();
 
          Intake1Through = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(79, 95.000), new Pose(140, 95.000)))
+                .addPath(new BezierLine(new Pose(79, 95.000), new Pose(180, 95.000)))
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(0))
                 .build();
 
          EndIntakeToShoot1 = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(144-15.000, 95.000), new Pose(144-50.000, 95.000)))
+                .addPath(new BezierLine(new Pose(150, 95.000), new Pose(144-50.000, 95.000)))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
@@ -116,6 +117,7 @@ public class RedSideAutonomous extends CommandOpMode {
 
 
     }
+
 
     private Command moveAndPrepare(PathChain path, double angle, double scalar) {
         FollowPathCommand movePath = new FollowPathCommand(follower, path, 1.0);
@@ -172,6 +174,16 @@ public class RedSideAutonomous extends CommandOpMode {
                         .build()));
     }
 
+    private Command shootLoneBall(PathChain path, double mps, double scalar) {
+        FollowPathCommand movePath = new FollowPathCommand(follower, path, 1.0);
+        return new ParallelDeadlineGroup(
+                new ShootOneBall(m_shooter, m_intake, m_drive),
+                new FollowPathCommand(follower, follower.pathBuilder()
+                        .addPath(new BezierLine(path.endPose(), path.endPose()))
+                        .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(135))
+                        .build()));
+    }
+
     @Override
     public void initialize() {
         super.reset();
@@ -197,9 +209,11 @@ public class RedSideAutonomous extends CommandOpMode {
 
         // Create the autonomous command sequence
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
+
                 //Preloads
                 new InstantCommand(m_intake::lockGate).withTimeout(150),
                 moveAndPrepareFlywheel(StartToShoot0, -150, 0.45, 1.0), //decreasing = less left -> increasing = less right // -90 degrees points to front of field
+                //shootLoneBall(StartToShoot0, 0.4, 1.0),
                 shootInPlaceFlywheel(StartToShoot0, 0.60, 1.0),
 
                 //First line
