@@ -8,6 +8,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public class LimelightSubsystem extends SubsystemBase {
     private final Limelight3A limelight;
 
-    public LimelightSubsystem() {
+    public LimelightSubsystem(HardwareMap hardwareMap) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // how often we ask ll for data (100x per second)
         limelight.start();

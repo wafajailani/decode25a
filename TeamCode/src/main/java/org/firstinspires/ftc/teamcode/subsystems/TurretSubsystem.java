@@ -67,6 +67,8 @@ public class TurretSubsystem extends SubsystemBase {
 
         }
         currentAngle = Util.convertTurretPosToDeg(currentAngle);
+      //  currentAngle = Util.convertTurretPosToDeg(currentPos);
+
         leftServo.set(currentPos);
         rightServo.set(currentPos);
     }

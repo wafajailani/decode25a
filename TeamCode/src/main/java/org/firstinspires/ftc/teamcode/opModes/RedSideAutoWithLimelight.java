@@ -1,5 +1,6 @@
 //package org.firstinspires.ftc.teamcode.opModes;
 //
+//import com.seattlesolvers.solverslib.command.CommandOpMode;
 //
 //import static org.firstinspires.ftc.teamcode.BotConstants.VELOCITY_COMPENSATION_MULTIPLIER;
 //
@@ -14,6 +15,7 @@
 //import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //import com.seattlesolvers.solverslib.command.Command;
 //import com.seattlesolvers.solverslib.command.CommandOpMode;
+//import com.seattlesolvers.solverslib.command.FunctionalCommand;
 //import com.seattlesolvers.solverslib.command.InstantCommand;
 //import com.seattlesolvers.solverslib.command.ParallelDeadlineGroup;
 //import com.seattlesolvers.solverslib.command.RunCommand;
@@ -22,16 +24,17 @@
 //import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 //import com.seattlesolvers.solverslib.util.TelemetryData;
 //
+//import org.firstinspires.ftc.teamcode.commands.ShootOneBall;
 //import org.firstinspires.ftc.teamcode.commands.ShootThreeBallsAuto;
 //import org.firstinspires.ftc.teamcode.commands.ShootThreeBallsFlywheel;
 //import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 //import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 //import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+//import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 //import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 //import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 //
-//@Autonomous(name="Red Side 12 Ball w/LL", group="LimeLight")
-//public class RedSideAutoWithLL extends CommandOpMode {
+//public class RedSideAutoWithLimelight extends CommandOpMode {
 //    private Follower follower;
 //    private DriveSubsystem m_drive;
 //    private IntakeSubsystem m_intake;
@@ -42,81 +45,157 @@
 //    TelemetryManager telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
 //    FieldManager fieldManager = PanelsField.INSTANCE.getField();
 //
-//    // Poses
-//    private final Pose startPose = new Pose(144-24.750, 140.000, Math.toRadians(135.000));
-//
-//    // Path chains
-//    private PathChain StartToShoot0, Shoot0ToIntake1, Intake1Through,
-//            EndIntakeToShoot1, Shoot1ToIntake2, Intake2Through, EndIntakeToShoot2,
-//            Shoot2ToIntake3, Intake3Through, EndIntakeToShoot3;
-//
-//    private PathChain GoToObelisk;
-//    private PathChain scorePickup1, scorePickup2, scorePickup3, park;
-//
-//    public void buildPaths() {
-//        StartToShoot0 = follower.pathBuilder()
+//    //Path Chains for ID 21  [PURPLE, PURPLE, GREEN]
+//    public PathChain Path1, Path2, Path3, Path4, Path5, Path6, Path7, Path8, Path9;
+//    public void buildPaths21() {
+//        Path1 = follower.pathBuilder()
 //                .addPath(
-//                        new BezierLine(new Pose(144-24.750, 145.000), new Pose(144-44.750, 112.000))
+//                        new BezierLine(new Pose(75.000, 115.000), new Pose(100.000, 83.000))
 //                )
-//                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(45))
+//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(0))
 //                .build();
 //
-////        GoToObelisk = follower.pathBuilder()
-////                .addPath(
-////                        new BezierLine(new Pose(144-24.750, 145.000), new Pose(144-44.750, 112.000))
-////                )
-////                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(45))
-////                .build();
-//
-//
-//
-//        Shoot0ToIntake1 = follower.pathBuilder()
+//        Path2 = follower.pathBuilder()
 //                .addPath(
-//                        new BezierLine(new Pose(144-44.750, 112.000), new Pose(144-45.000, 95.000))
+//                        new BezierLine(new Pose(100.000, 83.000), new Pose(120.000, 83.000))
 //                )
-//                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(90))
+//                .setConstantHeadingInterpolation(Math.toRadians(0))
 //                .build();
 //
-//        Intake1Through = follower.pathBuilder()
-//                .addPath(new BezierLine(new Pose(144-45.000, 95.000), new Pose(144-15.000, 95.000)))
-//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
+//        Path3 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(120.000, 83.000), new Pose(95.000, 100.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
 //                .build();
 //
-//        EndIntakeToShoot1 = follower.pathBuilder()
-//                .addPath(new BezierLine(new Pose(144-15.000, 95.000), new Pose(144-50.000, 95.000)))
-//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
+//        Path4 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(95.000, 100.000), new Pose(95.000, 60.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
 //                .build();
 //
-//        Shoot1ToIntake2 = follower.pathBuilder()
-//                .addPath(new BezierLine(new Pose(144-50.000, 95.000), new Pose(144-45.000, 70.000)))
-//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
+//        Path5 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(95.000, 60.000), new Pose(125.000, 60.000))
+//                )
+//                .setConstantHeadingInterpolation(Math.toRadians(0))
 //                .build();
 //
-//        Intake2Through = follower.pathBuilder()
-//                .addPath(new BezierLine(new Pose(144-45.000, 70.000), new Pose(144-7.500, 70.000)))
-//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
+//        Path6 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(125.000, 60.000), new Pose(82.000, 81.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
 //                .build();
 //
-//        EndIntakeToShoot2 = follower.pathBuilder()
-//                .addPath(new BezierLine(new Pose(144-7.500, 70.000), new Pose(144-70.000, 80.000)))
-//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
+//        Path7 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(82.000, 81.000), new Pose(103.000, 35.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
 //                .build();
 //
-//        Shoot2ToIntake3 = follower.pathBuilder()
-//                .addPath(new BezierLine(new Pose(144-70.000, 80.000), new Pose(144-50.000, 48.750)))
-//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
+//        Path8 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(103.000, 35.000), new Pose(125.000, 35.000))
+//                )
+//                .setConstantHeadingInterpolation(Math.toRadians(0))
 //                .build();
 //
-//        Intake3Through = follower.pathBuilder()
-//                .addPath(new BezierLine(new Pose(144-50.000, 48.750), new Pose(144-10.000, 48.750)))
-//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
-//                .build();
-//
-//        EndIntakeToShoot3 = follower.pathBuilder()
-//                .addPath(new BezierLine(new Pose(144-10.000, 48.750), new Pose(144-70.000, 80.000)))
-//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
+//        Path9 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(125.000, 35.000), new Pose(80.000, 10.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(55))
 //                .build();
 //    }
+//
+//    // Path Chains for ID 22 [PURPLE. GREEN, PURPLE]
+//
+//    public PathChain GoToRow2, IntakeRow2, GoToShoot2, GoToRow1, IntakeRow1, GoToShoot1, GoToRow3, IntakeRow3, GoToShoot3;
+//
+//    public void buildPaths22() {
+//        Path1 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(75.000, 115.000), new Pose(102.000, 60.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(0))
+//                .build();
+//
+//        Path2 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(102.000, 60.000), new Pose(122.000, 60.000))
+//                )
+//                .setConstantHeadingInterpolation(Math.toRadians(0))
+//                .build();
+//
+//        Path3 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(122.000, 60.000), new Pose(102.000, 60.000))
+//                )
+//                .setConstantHeadingInterpolation(Math.toRadians(0))
+//                .build();
+//
+//        Path4 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(102.000, 60.000), new Pose(100.000, 105.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
+//                .build();
+//
+//        Path5 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(100.000, 105.000), new Pose(100.000, 85.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+//                .build();
+//
+//        Path7 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(100.000, 85.000), new Pose(100.000, 85.000))
+//                )
+//                .setConstantHeadingInterpolation(Math.toRadians(0))
+//                .build();
+//
+//        Path8 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(100.000, 85.000), new Pose(115.000, 85.000))
+//                )
+//                .setConstantHeadingInterpolation(Math.toRadians(0))
+//                .build();
+//
+//        Path9 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(115.000, 85.000), new Pose(100.000, 105.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
+//                .build();
+//
+//        Path10 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(100.000, 105.000), new Pose(100.000, 35.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+//                .build();
+//
+//        Path11 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(100.000, 35.000), new Pose(115.000, 35.000))
+//                )
+//                .setConstantHeadingInterpolation(Math.toRadians(0))
+//                .build();
+//
+//        Path12 = follower.pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(115.000, 35.000), new Pose(80.000, 10.000))
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(55))
+//                .build();
+//    }
+//    //Path Chains for ID 23 [GREEN, PURPLE, PURPLE]
+//
 //
 //    private Command moveAndPrepare(PathChain path, double angle, double scalar) {
 //        FollowPathCommand movePath = new FollowPathCommand(follower, path, 1.0);
@@ -173,6 +252,16 @@
 //                        .build()));
 //    }
 //
+//    private Command shootLoneBall(PathChain path, double mps, double scalar) {
+//        FollowPathCommand movePath = new FollowPathCommand(follower, path, 1.0);
+//        return new ParallelDeadlineGroup(
+//                new ShootOneBall(m_shooter, m_intake, m_drive),
+//                new FollowPathCommand(follower, follower.pathBuilder()
+//                        .addPath(new BezierLine(path.endPose(), path.endPose()))
+//                        .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(135))
+//                        .build()));
+//    }
+//
 //    @Override
 //    public void initialize() {
 //        super.reset();
@@ -182,10 +271,10 @@
 //        m_turret = new TurretSubsystem(hardwareMap, telemetryManager);
 //
 //        m_intake.setDefaultCommand(new RunCommand(m_intake::stopMotor, m_intake));
-//        m_turret.setDefaultCommand(
+//     /*   m_turret.setDefaultCommand(
 //                new RunCommand(() -> m_turret.setTurretAngleFromPose(follower.getPose()
 //                        .rotate(-135, true)),
-//                        m_turret));
+//                        m_turret)); */
 //        m_shooter.setDefaultCommand(new RunCommand(()->m_shooter.setMotorDesiredVelocities(VELOCITY_COMPENSATION_MULTIPLIER), m_shooter));
 //
 //        register(m_intake, m_turret, m_shooter);
@@ -193,27 +282,26 @@
 //
 //        // Initialize follower
 //        follower = Constants.createFollower(hardwareMap);
-//        follower.setStartingPose(startPose);
-//        buildPaths();
 //
-//        SequentialCommandGroup autoSequence = new SequentialCommandGroup(
-//                new FollowPathCommand(follower, follower.pathBuilder()
-//                        .addPath(new BezierLine(StartToShoot0, GoToObelisk)
-//                        .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(135))
-//                        .build()));
-//        );
+//        buildPaths();
 //
 //        // Create the autonomous command sequence
 //        SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
+//
 //                //Preloads
-//                moveAndPrepareFlywheel(StartToShoot0, 30.0-90, 0.60, 1.0),
+//                //new InstantCommand(m_intake::lockGate).withTimeout(150),
+//
+//                moveAndPrepareFlywheel(StartToShoot0, -130, 0.475, 1.0), //decreasing = less left -> increasing = less right // -90 degrees points to front of field
+//                //shootLoneBall(StartToShoot0, 0.4, 1.0), // first ball
+//                //shootLoneBall(StartToShoot0, 0.47, 1.0), // next two balls
 //                shootInPlaceFlywheel(StartToShoot0, 0.60, 1.0),
 //
 //                //First line
+//                new FollowPathCommand(follower, TurnInPlace),
 //                moveAndIntake(Shoot0ToIntake1, Intake1Through),
 //                new InstantCommand(m_intake::lockGate).withTimeout(150)
 //                        .deadlineWith( new RunCommand(()->m_intake.setDutyCycle(1.0))),
-//                moveAndPrepareFlywheel(EndIntakeToShoot1, 29.0-90, 0.625, 1.0),
+//                moveAndPrepareFlywheel(EndIntakeToShoot1, -150, 0.625, 1.0),
 //                shootInPlaceFlywheel(EndIntakeToShoot1, 0.625, 1.0),
 //
 //                //Second line
@@ -253,7 +341,7 @@
 //        schedule(autonomousWithTurretAdjustmentAndAbort);
 //
 //        // Schedule the autonomous sequence
-//        schedule(autonomousWithTurretAdjustment);
+//        // schedule(autonomousWithTurretAdjustment);
 //    }
 //
 //    @Override
