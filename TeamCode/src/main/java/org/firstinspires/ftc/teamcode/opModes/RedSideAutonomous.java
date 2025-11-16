@@ -53,58 +53,62 @@ public class RedSideAutonomous extends CommandOpMode {
             Shoot2ToIntake3, Intake3Through, EndIntakeToShoot3, TurnInPlace;
     private PathChain scorePickup1, scorePickup2, scorePickup3, park;
 
+
     public void buildPaths() {
          StartToShoot0 = follower.pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(144-24.750, 145.000), new Pose(90, 102.000))  //     new BezierLine(new Pose(144-24.750, 145.000), new Pose(144-44.750, 112.000))
+                .addPath(            // new Pose(144-24.750, 145.000),
+                        new BezierLine( new Pose( 119, 129), new Pose(90, 102.000))  //     new BezierLine(new Pose(144-24.750, 145.000), new Pose(144-44.750, 112.000))
                 )
                  .setConstantHeadingInterpolation(Math.toRadians(45))
+                 .setBrakingStrength(0.6) // wf
+                 .setGlobalDeceleration()
                  .build();
 
          Shoot0ToIntake1 = follower.pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(90, 102), new Pose(90, 95.000))
+                        new BezierLine(new Pose(90, 102), new Pose(90, 75.000))  // (90, 85) too high
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0)) //45, 90
+                 .setBrakingStrength(0.6) // wf
                 .build();
 
          Intake1Through = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(90, 95.000), new Pose(130, 95.000)))
+                .addPath(new BezierLine(new Pose(90, 75.000), new Pose(132, 95.000)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
          EndIntakeToShoot1 = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(130, 95.000), new Pose(94, 95.000)))
+                .addPath(new BezierLine(new Pose(132, 95.000), new Pose(94, 95.000)))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
          Shoot1ToIntake2 = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(94, 95.000), new Pose(94.000, 70.000)))
+                .addPath(new BezierLine(new Pose(94, 95.000), new Pose(94.000, 60.000))) //(94,55) too high up
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                 .build();
 
          Intake2Through = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(94.000, 70.000), new Pose(130, 70.000)))
+                .addPath(new BezierLine(new Pose(94.000, 60.000), new Pose(165, 60.000)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
          EndIntakeToShoot2 = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(130, 70.000), new Pose(94, 95)))
+                .addPath(new BezierLine(new Pose(165, 60.000), new Pose(94, 95)))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
          Shoot2ToIntake3 = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(94, 94), new Pose(94, 45)))
+                .addPath(new BezierLine(new Pose(94, 95), new Pose(94, 30)))
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                 .build();
 
          Intake3Through = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(94, 45), new Pose(130, 45)))
+                .addPath(new BezierLine(new Pose(94, 30), new Pose(145, 30)))
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
          EndIntakeToShoot3 = follower.pathBuilder()
-                .addPath(new BezierLine(new Pose(130, 45), new Pose(94, 95)))
+                .addPath(new BezierLine(new Pose(125, 30), new Pose(94, 95)))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
@@ -181,6 +185,7 @@ public class RedSideAutonomous extends CommandOpMode {
     public void initialize() {
         super.reset();
 
+
         m_intake = new IntakeSubsystem(hardwareMap);
         m_shooter = new ShooterSubsystem(hardwareMap);
         m_turret = new TurretSubsystem(hardwareMap, telemetryManager);
@@ -200,32 +205,30 @@ public class RedSideAutonomous extends CommandOpMode {
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
 
                 //Preloads
-                moveAndPrepareFlywheel(StartToShoot0, 45, 0.5, 1.0), //mps was 0.475, decreasing = less left -> increasing = less right // -90 degrees points to front of field
-                //shootLoneBall(StartToShoot0, 0.4, 1.0), // first ball
-                //shootLoneBall(StartToShc oot0, 0.47, 1.0), // next two balls shoot a higher speed b/c compressed more
-                shootInPlaceFlywheel(StartToShoot0, 0.50, 1.0),
+                moveAndPrepareFlywheel(StartToShoot0, 47, 0.66, 1.0), // decreasing = less left -> increasing = less right // -90 degrees points to front of field
+                shootInPlaceFlywheel(StartToShoot0, 0.67, 1.0),
+                //new InstantCommand(m_intake::unlockGate),
 
                 //First line
-               // new FollowPathCommand(follower, TurnInPlace),
                 moveAndIntake(Shoot0ToIntake1, Intake1Through),
                 new InstantCommand(m_intake::lockGate).withTimeout(150)
                         .deadlineWith( new RunCommand(()->m_intake.setDutyCycle(1.0))),
-                moveAndPrepareFlywheel(EndIntakeToShoot1, 45, 0.625, 1.0),
-                shootInPlaceFlywheel(EndIntakeToShoot1, 0.625, 1.0),
+                moveAndPrepareFlywheel(EndIntakeToShoot1, 45, 0.78, 1.0),
+                shootInPlaceFlywheel(EndIntakeToShoot1, 0.67, 1.0),
 
                 //Second line
                 moveAndIntake(Shoot1ToIntake2, Intake2Through),
                 new InstantCommand(m_intake::lockGate).withTimeout(150)
                         .deadlineWith( new RunCommand(()->m_intake.setDutyCycle(1.0))),
-                moveAndPrepareFlywheel(EndIntakeToShoot2, 32.0-90, 0.74, 1.0),
-                shootInPlaceFlywheel(EndIntakeToShoot2, 0.74, 1.0),
+                moveAndPrepareFlywheel(EndIntakeToShoot2, 45, 0.67, 1.0),
+                shootInPlaceFlywheel(EndIntakeToShoot2, 0.67, 1.0),
 
                 //Third line
                 moveAndIntake(Shoot2ToIntake3, Intake3Through),
                 new InstantCommand(m_intake::lockGate).withTimeout(150)
                 .deadlineWith( new RunCommand(()->m_intake.setDutyCycle(1.0))),
-                moveAndPrepareFlywheel(EndIntakeToShoot3, 32.0-90, 0.74, 1.0),
-                shootInPlaceFlywheel(EndIntakeToShoot1, 0.74, 1.0),
+                moveAndPrepareFlywheel(EndIntakeToShoot3, 45, 0.67, 1.0),
+                shootInPlaceFlywheel(EndIntakeToShoot1, 0.63, 1.0),
 
                 //Ending stuff
                 new WaitCommand(1000),

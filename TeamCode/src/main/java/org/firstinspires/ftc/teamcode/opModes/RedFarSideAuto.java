@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 @Autonomous
-public class FarSideAuto extends CommandOpMode {
+public class RedFarSideAuto extends CommandOpMode {
     private Follower follower;
     private DriveSubsystem m_drive;
     private IntakeSubsystem m_intake;
