@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.utils.MathUtil;
 import org.firstinspires.ftc.teamcode.utils.ShooterSpeedLookup;
 import org.firstinspires.ftc.teamcode.utils.Util;
 
+import java.util.concurrent.TimeUnit;
+
 public class ShooterSubsystem extends SubsystemBase {
     private final MotorEx shooterMotor1;
     private final MotorEx shooterMotor2;
@@ -85,14 +87,16 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotor2.set(calculated);
     }
 
-
+    public void waitSeconds(int time) throws InterruptedException { //wj
+        TimeUnit.SECONDS.sleep(5000);
+    }
 
     public boolean withinFlywheelTolerance(double tolerance) {
         flywheelPIDF.setTolerance(tolerance);
         return flywheelPIDF.atSetPoint();
     }
 
-    public double getShooter1MPS() {
+    public double getShooterOneMPS() {
         return shooterMotor1.getCorrectedVelocity() * CONVERT_VELOCITY_TO_MPS;
     }
 

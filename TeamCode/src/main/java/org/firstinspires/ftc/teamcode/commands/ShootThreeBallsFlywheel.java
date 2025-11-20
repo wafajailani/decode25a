@@ -55,7 +55,7 @@
 ////        while (withinTimeoutTime(1000)
 ////                && !m_shooter.withinFlywheelTolerance(0.1)) {
 ////            Log.println(Log.INFO, "Is Shooter Within Velocity:", "" + m_shooter.withinFlywheelTolerance(0.03));
-////            Log.println(Log.INFO, "Shooter Velocity:", "" + m_shooter.getShooter1MPS());
+////            Log.println(Log.INFO, "Shooter Velocity:", "" + m_shooter.getShooterOneMPS());
 ////            m_intake.setDutyCycle(-0.0);
 ////            m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
 ////        }
@@ -64,7 +64,7 @@
 ////
 ////            timeout.reset();
 ////            while (withinTimeoutTime(250)) {
-////                Log.println(Log.INFO, "Shooter Velocity:", "" + m_shooter.getShooter1MPS());
+////                Log.println(Log.INFO, "Shooter Velocity:", "" + m_shooter.getShooterOneMPS());
 ////                m_intake.setDutyCycle(-1.0);
 ////                m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
 ////            }
@@ -74,17 +74,17 @@
 ////            m_intake.unlockTransfer();
 ////            timeout.reset();
 ////
-////            double startSpeed =  m_shooter.getShooter1MPS();
-////            while (withinTimeoutTime(500) && Math.abs(startSpeed-m_shooter.getShooter1MPS())<0.1) {
+////            double startSpeed =  m_shooter.getShooterOneMPS();
+////            while (withinTimeoutTime(500) && Math.abs(startSpeed-m_shooter.getShooterOneMPS())<0.1) {
 ////                Log.println(Log.INFO, "Time", ""+timeout.time(TimeUnit.MILLISECONDS));
 ////                m_intake.setDutyCycle(1.0);
 ////                m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
 ////            }
 ////        }
 ////
-////        double startSpeed =  m_shooter.getShooter1MPS();
+////        double startSpeed =  m_shooter.getShooterOneMPS();
 ////        timeout.reset();
-////        while (withinTimeoutTime(750) && Math.abs(startSpeed-m_shooter.getShooter1MPS())<0.1) {
+////        while (withinTimeoutTime(750) && Math.abs(startSpeed-m_shooter.getShooterOneMPS())<0.1) {
 ////            Log.println(Log.INFO, "Time", ""+timeout.time(TimeUnit.MILLISECONDS));
 ////            m_intake.setDutyCycle(1.0);
 ////            m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
@@ -173,7 +173,7 @@
 //            while (withinTimeoutTime(250)) {
 //
 //                //Print out the shooter velocity and desired velocity
-//                Log.println(Log.INFO, this.getName(), "Shooter Velocity:" + m_shooter.getShooter1MPS());
+//                Log.println(Log.INFO, this.getName(), "Shooter Velocity:" + m_shooter.getShooterOneMPS());
 //                Log.println(Log.INFO, this.getName(), "Desired Velocity:" + (m_desiredVelocityMPS == null ? 0.0 : m_desiredVelocityMPS));
 //
 //                m_intake.setDutyCycle(-1.0);
@@ -186,17 +186,17 @@
 //            if (m_desiredVelocityMPS!=null) {
 //                timeout.reset();
 //                while (withinTimeoutTime(250) &&
-//                        !MathUtil.withinTolerance(m_desiredVelocityMPS-m_shooter.getShooter1MPS(), 0.025)) {
+//                        !MathUtil.withinTolerance(m_desiredVelocityMPS-m_shooter.getShooterOneMPS(), 0.025)) {
 //
 //                    //Print out the shooter velocity and desired velocity
 //                    Log.println(
 //                            Log.INFO,
 //                            this.getName(),
-//                            "Shooter Velocity:" + m_shooter.getShooter1MPS());
+//                            "Shooter Velocity:" + m_shooter.getShooterOneMPS());
 //                    Log.println(
 //                            Log.INFO,
 //                            this.getName(),
-//                            "Velocity Error:" + Math.abs(m_desiredVelocityMPS-m_shooter.getShooter1MPS()));
+//                            "Velocity Error:" + Math.abs(m_desiredVelocityMPS-m_shooter.getShooterOneMPS()));
 //
 //                    //Stop intake and update desired shooter speeds
 //                    m_intake.setDutyCycle(0.0);
@@ -209,7 +209,7 @@
 //            timeout.reset();
 //
 //            //Get the current speed of the shooter.
-//            m_startSpeed =  m_shooter.getShooter1MPS();
+//            m_startSpeed =  m_shooter.getShooterOneMPS();
 //
 //
 //            //If the desired velocity is unknown, set the desired velocity to this speed
@@ -219,7 +219,7 @@
 //
 //            //Wait for 500ms or if shooter is outside of tolerance => ball in transit
 //            while (withinTimeoutTime(500)
-//                    && MathUtil.withinTolerance(m_startSpeed-m_shooter.getShooter1MPS(), 0.1)) {
+//                    && MathUtil.withinTolerance(m_startSpeed-m_shooter.getShooterOneMPS(), 0.1)) {
 ////                Log.println(Log.INFO, "Time", ""+timeout.time(TimeUnit.MILLISECONDS));
 //                m_intake.setDutyCycle(1.0);
 //                m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
@@ -230,7 +230,7 @@
 //        //Better to discard than mess up the rest of auto
 //        timeout.reset();
 //        while (withinTimeoutTime(750)
-//                && MathUtil.withinTolerance(m_startSpeed-m_shooter.getShooter1MPS(), 0.1)) {
+//                && MathUtil.withinTolerance(m_startSpeed-m_shooter.getShooterOneMPS(), 0.1)) {
 ////            Log.println(Log.INFO, "Time", ""+timeout.time(TimeUnit.MILLISECONDS));
 //            m_intake.setDutyCycle(1.0);
 //            m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
@@ -263,6 +263,7 @@
 //        return timeout.time(TimeUnit.MILLISECONDS) < millis;
 //    }
 //}
+
 
 
 package org.firstinspires.ftc.teamcode.commands;
@@ -322,7 +323,7 @@ public class ShootThreeBallsFlywheel extends CommandBase {
         while (withinTimeoutTime(1000)
                 && !m_shooter.withinFlywheelTolerance(0.1)) {
             Log.println(Log.INFO, "Is Shooter Within Velocity:", "" + m_shooter.withinFlywheelTolerance(0.03));
-            Log.println(Log.INFO, "Shooter Velocity:", "" + m_shooter.getShooter1MPS());
+            Log.println(Log.INFO, "Shooter Velocity:", "" + m_shooter.getShooterOneMPS());
             m_intake.setDutyCycle(-0.0);
             m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
         }
@@ -331,27 +332,26 @@ public class ShootThreeBallsFlywheel extends CommandBase {
 
             timeout.reset();
             while (withinTimeoutTime(250)) {
-                Log.println(Log.INFO, "Shooter Velocity:", "" + m_shooter.getShooter1MPS());
+                Log.println(Log.INFO, "Shooter Velocity:", "" + m_shooter.getShooterOneMPS());
                 m_intake.setDutyCycle(-1.0);
                 m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
             }
 
 
-
             m_intake.unlockTransfer();
             timeout.reset();
 
-            double startSpeed =  m_shooter.getShooter1MPS();
-            while (withinTimeoutTime(500) && Math.abs(startSpeed-m_shooter.getShooter1MPS())<0.1) {
+            double startSpeed =  m_shooter.getShooterOneMPS();
+            while (withinTimeoutTime(500) && Math.abs(startSpeed-m_shooter.getShooterOneMPS())<0.1) {
                 Log.println(Log.INFO, "Time", ""+timeout.time(TimeUnit.MILLISECONDS));
                 m_intake.setDutyCycle(1.0);
                 m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
             }
         }
 
-        double startSpeed =  m_shooter.getShooter1MPS();
+        double startSpeed =  m_shooter.getShooterOneMPS();
         timeout.reset();
-        while (withinTimeoutTime(750) && Math.abs(startSpeed-m_shooter.getShooter1MPS())<0.1) {
+        while (withinTimeoutTime(750) && Math.abs(startSpeed-m_shooter.getShooterOneMPS())<0.1) {
             Log.println(Log.INFO, "Time", ""+timeout.time(TimeUnit.MILLISECONDS));
             m_intake.setDutyCycle(1.0);
             m_shooter.updateSpeeds(m_velocityMPS, m_scalar);
